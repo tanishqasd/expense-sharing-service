@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from app.database import initialize_database
+from app.users import router as users_router
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+app.include_router(users_router)
 
 
 class HealthResponse(BaseModel):

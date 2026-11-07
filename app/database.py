@@ -1,7 +1,9 @@
+from collections.abc import Iterator
 from pathlib import Path
 from sqlite3 import Connection
 
 from sqlalchemy import URL, create_engine, event
+from sqlalchemy.orm import Session
 
 from app.models import Base
 
@@ -29,3 +31,8 @@ def enable_foreign_keys(
 
 def initialize_database() -> None:
     Base.metadata.create_all(engine)
+
+
+def get_session() -> Iterator[Session]:
+    with Session(engine) as session:
+        yield session
