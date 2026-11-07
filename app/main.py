@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from app.database import initialize_database
+from app.groups import router as groups_router
 from app.users import router as users_router
 
 
@@ -21,6 +22,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(users_router)
+app.include_router(groups_router)
 
 
 class HealthResponse(BaseModel):
