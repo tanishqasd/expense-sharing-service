@@ -1,10 +1,24 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Literal
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from app.database import initialize_database
 
-app = FastAPI(title="Expense Sharing Service", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    initialize_database()
+    yield
+
+
+app = FastAPI(
+    title="Expense Sharing Service",
+    version="0.1.0",
+    lifespan=lifespan,
+)
 
 
 class HealthResponse(BaseModel):
