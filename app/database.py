@@ -17,7 +17,7 @@ engine = create_engine(
 
 
 @event.listens_for(engine, "connect")
-def enable_foreign_keys(
+def configure_sqlite_connection(
     dbapi_connection: Connection,
     _connection_record: object,
 ) -> None:
@@ -27,6 +27,13 @@ def enable_foreign_keys(
         dbapi_connection.execute("PRAGMA foreign_keys = ON").close()
     finally:
         dbapi_connection.autocommit = previous_autocommit
+
+    dbapi_connection.create_function(
+        "unicode_casefold",
+        1,
+        str.casefold,
+        deterministic=True,
+    )
 
 
 def initialize_database() -> None:
